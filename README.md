@@ -1,2 +1,2 @@
 # CMS-Users
-A WordPress plugin that offers end user functionality.
+A WordPress plugin that offers various end user functionality.
