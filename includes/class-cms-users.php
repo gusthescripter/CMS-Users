@@ -172,7 +172,12 @@ class CMS_Users {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		
+		$this->loader->add_action( 'register_form', $plugin_public, 'reg_form' );
+		$this->loader->add_action( 'registration_errors', $plugin_public, 'reg_err' );
+		$this->loader->add_action( 'user_register', $plugin_public, 'reg_user' );
+		
+		$this->loader->add_shortcode( 'my_shortcode_tag', $plugin_public, 'dumb_code' );
 	}
 
 	/**

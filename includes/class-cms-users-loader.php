@@ -46,10 +46,12 @@ class CMS_Users_Loader {
 	 *
 	 * @since    1.0.0
 	 */
+	 protected $shortcodes;
 	public function __construct() {
 
 		$this->actions = array();
 		$this->filters = array();
+		$this->shortcodes = array();
 
 	}
 
@@ -66,7 +68,7 @@ class CMS_Users_Loader {
 	public function add_action( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
 		$this->actions = $this->add( $this->actions, $hook, $component, $callback, $priority, $accepted_args );
 	}
-
+	
 	/**
 	 * Add a new filter to the collection to be registered with WordPress.
 	 *
@@ -79,6 +81,19 @@ class CMS_Users_Loader {
 	 */
 	public function add_filter( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
 		$this->filters = $this->add( $this->filters, $hook, $component, $callback, $priority, $accepted_args );
+	}
+	
+	/**
+     * Add a new shortcode to the collection to be registered with WordPress
+     *
+     * @since     1.0.0
+     * @param     string        $tag           The name of the new shortcode.
+     * @param     object        $component      A reference to the instance of the object on which the shortcode is defined.
+     * @param     string        $callback       The name of the function that defines the shortcode.
+     */
+    
+    public function add_shortcode( $hook, $component, $callback, $priority = 10, $accepted_args = 1 ) {
+		$this->shortcodes = $this->add( $this->shortcodes, $hook, $component, $callback, $priority, $accepted_args );
 	}
 
 	/**
@@ -110,20 +125,24 @@ class CMS_Users_Loader {
 	}
 
 	/**
-	 * Register the filters and actions with WordPress.
-	 *
-	 * @since    1.0.0
-	 */
-	public function run() {
+     * Register the filters, actions, and shortcodes with WordPress.
+     *
+     * @since    1.0.0
+     */
+    public function run() {
 
-		foreach ( $this->filters as $hook ) {
-			add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
-		}
+        foreach ( $this->filters as $hook ) {
+            add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
+        }
 
-		foreach ( $this->actions as $hook ) {
-			add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
-		}
+        foreach ( $this->actions as $hook ) {
+            add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
+        }
 
-	}
+        foreach ( $this->shortcodes as $hook ) {
+            add_shortcode( $hook['hook'], array( $hook['component'], $hook['callback'] ) );
+        }
+
+    }
 
 }

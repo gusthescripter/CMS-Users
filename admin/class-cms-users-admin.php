@@ -51,6 +51,8 @@ class CMS_Users_Admin {
 
 		$this->cms_users = $cms_users;
 		$this->version = $version;
+		
+		$this->version = $version;
 
 	}
 

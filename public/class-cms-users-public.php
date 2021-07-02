@@ -50,10 +50,70 @@ class CMS_Users_Public {
 	public function __construct( $cms_users, $version ) {
 
 		$this->cms_users = $cms_users;
+		
 		$this->version = $version;
 
 	}
+	
+	//1. Add a new form element...
+	
+	public function reg_form() {
 
+    $first_name = ( ! empty( $_POST['first_name'] ) ) ? sanitize_text_field( $_POST['first_name'] ) : '';
+        
+        ?>
+        <p>
+            <label for="first_name"><?php _e( 'First Name', 'mydomain' ) ?><br />
+                <input type="text" name="first_name" id="first_name" class="input" value="<?php echo esc_attr(  $first_name  ); ?>" size="25" /></label>
+        </p>
+        <p>
+            <label for="last_name"><?php _e( 'Last Name', 'mydomain' ) ?><br />
+                <input type="text" name="last_name" id="last_name" class="input" value="<?php echo esc_attr(  $last_name  ); ?>" size="25" /></label>
+        </p>
+        <?php
+    }
+
+    //2. Add validation. In this case, we make sure first_name is required.
+    
+    public function reg_err( $errors, $sanitized_user_login, $user_email ) {
+        
+        if ( empty( $_POST['first_name'] ) || ! empty( $_POST['first_name'] ) && trim( $_POST['first_name'] ) == '' ) {
+        $errors->add( 'first_name_error', sprintf('<strong>%s</strong>: %s',__( 'ERROR', 'mydomain' ),__( 'You must include a first name.', 'mydomain' ) ) );
+
+        }
+
+        return $errors;
+    }
+
+    //3. Finally, save our extra registration user meta.
+    
+    public function reg_user( $user_id ) {
+        if ( ! empty( $_POST['first_name'] ) ) {
+            update_user_meta( $user_id, 'first_name', sanitize_text_field( $_POST['first_name'] ) );
+        }
+    }
+	
+	
+	public function wfp_shortcode() {
+		
+		ob_start();
+		custom_registration_function();
+
+		return ob_get_clean();
+	}
+	
+	public function dumb_code() {
+		return 'test1';
+		wfp_html();
+		return 'test2';
+		return wfp_html();
+		return 'test3';
+	}
+	
+	public function my_shortcode( $atts ) {
+		return 'Hello World';
+	}
+	
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
 	 *
