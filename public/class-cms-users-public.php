@@ -49,7 +49,7 @@ class CMS_Users_Public {
 	 */
 	public function __construct( $cms_users, $version ) {
 
-		$this->cms_users = $plugin_name;
+		$this->cms_users = $cms_users;
 		$this->version = $version;
 
 	}
